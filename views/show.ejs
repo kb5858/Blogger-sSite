@@ -1,0 +1,15 @@
+<%- include('_header') %>
+  <div class="container" style="background-color: #a7f77d; margin-top: 15vh;">
+    <h1 class="mb-1"><%= article.title %></h1>
+    <div class="text-muted mb-2">
+      <%= article.createdAt.toLocaleDateString() %>
+    </div>
+    <a href="/main" class="btn btn-secondary">All Articles</a>
+    <a href="/articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>
+
+    <div>
+      <%= article.description %>
+    </div>
+  </div>
+</body>
+</html>

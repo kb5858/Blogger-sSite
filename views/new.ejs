@@ -1,0 +1,13 @@
+<%- include('_header') %>
+<form action="/new" method="POST">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Title</label>
+      <input type="text" class="form-control" id="title" aria-describedby="emailHelp" name="title" value=<%= article.title %>>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Description</label>
+      <input type="textarea" class="form-control" id="description" name="description" value=<%= article.description %>>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <%- include('_footer') %>
