@@ -29,23 +29,10 @@ app.post('/', async (req, res) => {
         email:req.body.email,
         password:req.body.password
     })
-    try {
-      bcrypt.genSalt(12, (err, salt) => {
-        bcrypt.hash(user.password, salt, (err, hash) => {
-          if (err) throw err;
-          user.password = hash;
-          user
-            .save()
-            .then(user => {
-              res.redirect('/login');
-            })
-            .catch(err => console.log(err));
-        });
-      });
-        
-      } catch (e) {
-        console.log(e);
-      }
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    user.password = await bcrypt.hash(user.password, salt);
+    user.save().then((doc) => res.redirect('/login'));
    
   })
   app.get('/login',(req,res)=>{
@@ -56,16 +43,17 @@ app.post('/', async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 const isMatch=await users.findOne({email:email});
-if(isMatch.password === password)
+if(isMatch){ const validPassword=await bcrypt.compare( password,isMatch.password);
+if( validPassword)
         {
           res.status(201).redirect('/main');
          
         } else {
-          res.status(400).send("Invalid Login Details");
+          console.log(password);
         }
       
    
-  })
+  }})
   app.get('/new',async(req,res)=>{
      res.render('new',{article:new Article()}); 
   })
