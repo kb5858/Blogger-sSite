@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const ejs = require("ejs");
+const bcrypt = require('bcryptjs');
 const port = process.env.PORT || 3000;
 const methodOverride = require('method-override')
 require("./models/connection");
@@ -29,9 +30,19 @@ app.post('/', async (req, res) => {
         password:req.body.password
     })
     try {
-    
-        const Registered = await user.save();
-        res.redirect('/login');
+      bcrypt.genSalt(12, (err, salt) => {
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          if (err) throw err;
+          user.password = hash;
+          user
+            .save()
+            .then(user => {
+              res.redirect('/login');
+            })
+            .catch(err => console.log(err));
+        });
+      });
+        
       } catch (e) {
         console.log(e);
       }
